@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>日天</title>
+	<style type="text/css">
+	*{
+		margin:0px;
+		padding:0px;
+	}
+	html{
+		width: 100%;
+		height: 100%;
+	}
+	#all{
+		/*position: relative;*/
+		width: 100%;
+		height: 100%;
+		text-align:center;
+		background-image: url(images/tiankong.jpg);
+		background-repeat: no-repeat;
+	}
+
+	img{
+		width: 25%;
+		height:40%;
+		/*display: block;*/
+		padding:20px 10px 5px 10px; 
+	}
+	#footer{
+		position: absolute;
+		background: #ff6020;
+		width: 100%;
+		height: 100px;
+		bottom: 0px;
+	}
+	#reset{
+		position: relative;
+		color: #0000ff;
+		height: 40px;
+		width: 60px;
+		top: 26px;
+	}
+	span{
+		position: relative;
+		padding: 25px;
+		top: 30px;
+		color: #c0ff20;
+	}
+	.count{
+		font-size: 30px;
+		
+	}
+	</style>
+	<script type="text/javascript">
+		  "use strict";
+
+
+        //  to check if the extension is installed
+        // if the extension is installed, var "webExtensionWallet" will be injected in to web page
+    // if(typeof(webExtensionWallet) === "undefined"){
+     //    alert ("您的浏览器没有安装钱包，请先安装NEBULAS钱包")
+    
+   //  }
+
+    var dappAddress = "n22Vqsr4yjekxWzyZfCPkCk27M97zdYNWHh"; 
+
+    var nebulas = require("nebulas"),
+        Account = nebulas.Account,
+        neb = new nebulas.Neb();
+        neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+    
+    var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+    var nebPay = new NebPay();
+    var serialNumber
+
+		
+		window.onload = function(){
+			var oSpan = document.getElementsByTagName("span");
+			var oImg = document.getElementsByTagName("img");
+			var oB = document.getElementsByName("vote");
+			for(var i=0;i<oImg.length;i++){
+				oImg[i].index = i;
+				oImg[i].onclick = function(){
+					// //新建连接对象
+					// xhr = new XMLHttpRequest();
+					// //打开连接
+					// xhr.open("GET","./text.php","true");
+					// //发送请求
+					// xhr.send(null);
+					// //监听状态变化
+					// xhr.onreadystatechange = function(){
+					// 	if(xhr.readyState==4 && xhr.status==200){
+					// 			alert("asdf");
+					// 	}
+					// }
+					// 
+				var to = dappAddress;
+        var value = "0";
+        var callFunction = "save"
+        var callArgs = "[\"" + this.index + "\",\"" + oB[this.index].innerHTML + "\"]"
+
+        serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
+            listener: cbPush        //设置listener, 处理交易返回信息
+        });
+        alert(this.index);  
+				//alert(oB[this.index].innerHTML);
+				oB[this.index].innerHTML = parseInt(oB[this.index].innerHTML)+1;
+		
+				}
+			}
+		}
+		function reset() {
+			var oSpan = document.getElementsByTagName("span");
+			var oB = document.getElementsByName("vote");
+			for(var i=0;i<oSpan.length;i++){
+				oB[i].innerHTML = 0;
+			}
+		}
+		
+	</script>
+</head>
+<body>
+<div id="all">
+	<img src="./images/chouchou.jpg" name="臭臭">
+	<img src="./images/yiyi.png" name="壹壹">
+	<img src="./images/qiqi.jpg" name="柒柒">
+	<img src="./images/xiaoniu.jpg" name="小牛">
+	<img src="./images/longaotian.jpg" name="龙傲天">
+	<img src="./images/yuanritian.jpg" name="袁日天">
+	<div id="footer">
+		<span class="count" id="臭臭"><b>臭臭:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="壹壹"><b>壹壹:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="柒柒"><b>柒柒:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="小牛"><b>小牛:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="龙傲天"><b>龙傲天:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="袁日天"><b>袁日天:</b><b name="vote">0</b><b>票</b></span>
+	</div>
+</div>
+</body>
+
+</html>

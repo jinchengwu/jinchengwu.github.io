@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+	
+	
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+
+    <title>NBA常规赛MVP投票</title>
+    <link rel="stylesheet" href="lib/bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <style>
+    	*{
+		margin:0px;
+		padding:0px;
+	}
+	html{
+		width: 100%;
+		height: 100%;
+	}
+	#all{
+		/*position: relative;*/
+		width: 100%;
+		height: 100%;
+		text-align:center;
+		background-image: url(images/tiankong.jpg);
+		background-repeat: no-repeat;
+	}
+ .name {
+            text-align: center;
+            font-size: 66px;
+            text-shadow: 3px 5px grey, 1px 1px #333;
+        }
+
+	img{
+		width: 25%;
+		height:40%;
+		/*display: block;*/
+		padding:20px 10px 5px 10px; 
+	}
+	#footer{
+		position: relative;
+		background: #ff6020;
+		width: 100%;
+		height: 100px;
+		bottom: 60px;
+	}
+	#reset{
+		position: relative;
+		color: #0000ff;
+		height: 40px;
+		width: 60px;
+		top: 26px;
+	}
+	span{
+		position: relative;
+		padding: 25px;
+		top: 30px;
+		color: #c0ff20;
+	}
+	.count{
+		font-size: 30px;
+		
+	}
+        .
+        
+        
+
+        .noExtension {
+            width: 60%;
+            height: 100px;
+            margin: auto;
+            font-size: 23px;
+        }
+
+       
+
+        @keyframes rotate {
+            0% { transform:rotateY(0deg);}
+            25% { transform:rotateY(180deg);}
+            50% { transform:rotateY(0deg);}
+            75% { transform:rotateY(180deg);}
+            100% { transform:rotateY(0deg);}
+        }
+
+        .logo_rotate {
+            /*
+            animation: rotate 10s infinite;
+            animation-fill-mode: forwards;
+            animation-timing-function: linear;
+                */
+            /*  当动画结束时，让<div>元素保留上一个关键帧的样式值 */
+        }
+
+
+
+
+        p{
+            text-indent:2em;
+            font-size: 30px;
+        }
+
+        .hide{
+            display: none;
+        }
+         .contenner{
+            //background: url("img/bg.jpg");
+            height: 150px;
+        }
+     
+    </style>
+</head>
+
+<body>
+	<div class="contenner">
+  
+        <div class="name">2018NBA 心目中MVP投票</div>
+     
+    </div>
+	<div id="all">
+	<img src="./images/1.jpg" name="勒布朗">
+	<img src="./images/2.jpg" name="库里">
+	<img src="./images/3.jpg" name="威斯布鲁克">
+	<img src="./images/4.jpg" name="哈登">
+	<img src="./images/5.jpg" name="杜兰特">
+	<img src="./images/6.jpg" name="欧文">
+	<div id="footer">
+		<span class="count" id="勒布朗"><b>勒布朗:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="库里"><b>库里:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="威斯布鲁克"><b>威斯布鲁克:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="哈登"><b>哈登:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="杜兰特"><b>杜兰特:</b><b name="vote">0</b><b>票</b></span>
+		<span class="count" id="欧文"><b>欧文:</b><b name="vote">0</b><b>票</b></span>
+	</div>
+</div>
+
+    
+   <div class="noExtension hide " id="noExtension">
+  
+        NOTE: 请安装NEBULAS钱包 <a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a>  来到电影BT分享的世界！
+    </div>
+    
+ 
+</div>
+<script src=lib/jquery-3.3.1.min.js></script>
+<script src=lib/nebPay.js></script>
+<script src=lib/bootstrap-4.0.0-dist/js/bootstrap.min.js></script>
+<script src=lib/nebulas.js></script>
+<script>
+
+    "use strict";
+
+
+     
+        //  to check if the extension is installed
+        // if the extension is installed, var "webExtensionWallet" will be injected in to web page
+     if(typeof(webExtensionWallet) === "undefined"){
+         alert ("您的浏览器没有安装钱包，请先安装NEBULAS钱包")
+         $("#noExtension").removeClass("hide")
+     }else{
+         $("#search_value").attr("disabled",false)
+         $("#search").attr("disabled",false)
+     }
+
+    var dappAddress = "n1vAYrWGqcxgDgH1XjSPTa5s4TSi38QwoD9"; 
+
+    var nebulas = require("nebulas"),
+        Account = nebulas.Account,
+        neb = new nebulas.Neb();
+    neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+
+  
+    var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
+    var nebPay = new NebPay();
+    var serialNumber
+  	
+    
+
+  
+    window.onload = function(){
+			var oSpan = document.getElementsByTagName("span");
+			var oImg = document.getElementsByTagName("img");
+			var oB = document.getElementsByName("vote");
+			
+			  var value = "0"
+				var from = Account.NewAccount().getAddressString();
+        var nonce = "0"
+        var aa = new Array(6) 
+        var gas_price = "1000000"
+        var gas_limit = "2000000"
+        var callFunction = "get";
+        var callArgs = "[\"" + i + "\"]"; //in the form of ["args"]
+        var contract = {
+            "function": callFunction,
+            "args": callArgs
+        }
+        for(var i=0;i<oImg.length;i++){
+        neb.api.call(from,dappAddress,value,nonce,gas_price,gas_limit,contract).then(function (resp) {
+           var  result = resp.result    ////resp is an object, resp.result is a JSON string 
+             result = JSON.parse(result)
+             console.log(result.value);
+              aa[i]= result.value ;
+              
+               }).catch(function (err) {
+            //cbSearch(err)
+            aa[i] =0 ;
+            console.log("error:" + err.message+aa)
+        })
+
+			}
+			
+			for(var i=0;i<oImg.length;i++){
+				oImg[i].index = i;
+				oImg[i].onclick = function(){
+					
+				oB[this.index].innerHTML = parseInt(oB[this.index].innerHTML)+aa[i]+1;
+				console.log(oB[this.index].innerHTML) ;
+				
+				var to = dappAddress;
+        var value = "0";
+        var callFunction = "save"
+        var callArgs = "[\"" + this.index + "\",\"" + oB[this.index].innerHTML + "\"]"
+
+        serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
+           // listener: cbPush        //设置listener, 处理交易返回信息
+        });
+         intervalQuery = setInterval(function () {
+            funcIntervalQuery();
+         
+        }, 5000);
+       // alert(this.index);  
+				//alert(oB[this.index].innerHTML);
+			
+				
+		
+				}
+		}
+	}
+		
+	
+
+
+</script>
+
+</html>
